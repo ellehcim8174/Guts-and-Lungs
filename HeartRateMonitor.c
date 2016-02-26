@@ -11,7 +11,10 @@
 #define SYSCLK      48000000L  // SYSCLK frequency in Hz for period code
 #define BAUDRATE      115200L  // Baud rate of UART in bps
 
+//variable declaration
 unsigned char overflow_count;
+float heart_rate;
+
 
 void PORT_Init (void)
 {
@@ -119,7 +122,10 @@ void main (void)
 		period=(overflow_count*65536.0+TH0*256.0+TL0)*(12.0/SYSCLK);
 		// Send the period to the serial port
 		printf( "\rf=%fs" , period);
+		
+		//heart_rate = 
     }
+  
 	
 }
 
