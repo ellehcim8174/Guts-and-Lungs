@@ -127,6 +127,8 @@ void main (void)
 		heart_rate = 1.0/(period/60.0); 
 		bpm = (int) heart_rate; 
 		
+		LCDprint(bpm, 1, 5); //print heart rate bpm to LCD display
+		
     }
   
 	
