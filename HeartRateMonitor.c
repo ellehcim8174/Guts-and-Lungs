@@ -13,7 +13,8 @@
 
 //variable declaration
 unsigned char overflow_count;
-float heart_rate;
+unsigned float heart_rate;
+unsigned int bpm;
 
 
 void PORT_Init (void)
@@ -123,7 +124,9 @@ void main (void)
 		// Send the period to the serial port
 		printf( "\rf=%fs" , period);
 		
-		//heart_rate = 
+		heart_rate = 1.0/(period/60.0); 
+		bpm = (int) heart_rate; 
+		
     }
   
 	
