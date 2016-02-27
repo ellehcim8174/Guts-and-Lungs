@@ -315,9 +315,12 @@ void main (void)
 		int2char(stringbpm, intbpm, 2);
 		LCDprint(stringbpm,2,1);
 		
-		targetHeart = calcTargetRate(workout, age)
-		if (targetHeart == 0)
+		if (B1==0){
+			targetHeart = calcTargetRate(workout, age);
+			if (targetHeart == 0)
 		//print undefined message to lcd
+		}
+		
 		
 	}
 	
