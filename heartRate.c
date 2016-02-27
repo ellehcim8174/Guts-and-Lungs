@@ -16,8 +16,6 @@
 #define LCD_D6 P1_1
 #define LCD_D7 P1_0
 #define CHARS_PER_LINE 16
-#define B1    P2_5
-#define B2    p2_6
 
 unsigned char overflow_count;
 
@@ -236,12 +234,31 @@ void int2char(char *string, unsigned int num, unsigned int size)
 	}
 }
 
+int calcTargetRate(unsigned int workout, unsigned int age){
+	unsigned int maxRate = 220-age;
+	int targetRate;
+	
+	if (workout==1)
+		return targetRate = (double) 0.6*maxRate;
+		
+	else if (workout==2)
+		return targetRate = (double) 0.7*maxRate;
+		
+	else if (workout==3)
+		return targetRate = (double) 0.8*maxRate;
+		
+	else
+		return targetRate = 0;
+}
+
 void main (void)
 {
 	float period;
    	float bpm;
    	unsigned int intbpm;
    	char stringbpm[3]; 
+   	unsigned int workout;
+   	unsigned int age;
 	// Configure the LCD
 	LCD_4BIT();
 	//initialize string
@@ -297,6 +314,11 @@ void main (void)
 		LCDprint("BPM:",1,1);
 		int2char(stringbpm, intbpm, 2);
 		LCDprint(stringbpm,2,1);
+		
+		targetHeart = calcTargetRate(workout, age)
+		if (targetHeart == 0)
+		//print undefined message to lcd
+		
 	}
 	
 }
