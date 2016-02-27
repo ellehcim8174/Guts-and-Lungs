@@ -322,7 +322,7 @@ void main (void)
 				//print undefined message to lcd
 				LCDprint("UNDEFINED", 1,1);}
 			else{
-			   int2char(stringTargetHeart, targetHeart, 1);
+			   int2char(stringTargetHeart, targetHeart, 3);
 			   LCDprint(stringTargetHeart, 2, 1);}
 		}
 		
