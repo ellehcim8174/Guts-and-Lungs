@@ -259,6 +259,7 @@ void main (void)
    	char stringbpm[3]; 
    	unsigned int workout;
    	unsigned int age;
+   	char stringTargetHeart[3];
 	// Configure the LCD
 	LCD_4BIT();
 	//initialize string
@@ -317,8 +318,12 @@ void main (void)
 		
 		if (B1==0){
 			targetHeart = calcTargetRate(workout, age);
-			if (targetHeart == 0)
-		//print undefined message to lcd
+			if (targetHeart == 0){
+				//print undefined message to lcd
+				LCDprint("UNDEFINED", 1,1);}
+			else{
+			   int2char(stringTargetHeart, targetHeart, 1);
+			   LCDprint(stringTargetHeart, 2, 1);}
 		}
 		
 		
