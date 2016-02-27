@@ -16,6 +16,8 @@
 #define LCD_D6 P1_1
 #define LCD_D7 P1_0
 #define CHARS_PER_LINE 16
+#define B1    P2_5
+#define B2    p2_6
 
 unsigned char overflow_count;
 
