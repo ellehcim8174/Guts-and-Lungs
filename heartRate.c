@@ -236,19 +236,28 @@ void int2char(char *string, unsigned int num, unsigned int size)
 
 int calcTargetRate(unsigned int workout, unsigned int age){
 	unsigned int maxRate = 220-age;
-	int targetRate;
+	int targetRate1;
+	int targetRate2;
+	int targetArray[2];
 	
 	if (workout==1)
-		return targetRate = (double) 0.6*maxRate;
+		targetRate1 = (double) 0.6*maxRate;
+		targetRate2 = (double) 0.7*maxRate;
 		
 	else if (workout==2)
-		return targetRate = (double) 0.7*maxRate;
+		targetRate1 = (double) 0.7*maxRate;
+		targetRate2 = (double) 0.8*maxRate;
+		
 		
 	else if (workout==3)
-		return targetRate = (double) 0.8*maxRate;
+		return targetRate1 = (double) 0.8*maxRate;
 		
 	else
-		return targetRate = 0;
+		return targetRate1 = 0;
+		
+	targetArray[0] = targetRate1;
+	targetArray[1] = targetRate2;
+	return targetArray;
 }
 
 void main (void)
