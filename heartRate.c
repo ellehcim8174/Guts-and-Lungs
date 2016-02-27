@@ -330,7 +330,8 @@ void main (void)
 		int2char(stringbpm, intbpm, 2);
 		LCDprint(stringbpm,2,1);
 		
-		if (B1==0){
+		if (B1==0)
+		{
 			targetHeart = calcTargetRate(workout, age);
 			x = targetHeart[0];  //range 1
 			y = targetHeart[1];  //range 2
@@ -339,14 +340,15 @@ void main (void)
 				LCDprint("UNDEFINED", 1,1);
 				
 		}
-			else{
-			   int2char(stringTargetHeart1, x, 3);
-			   int2char(stringTargetHeart2, y, 3);
-			   LCDprint("Trgt Heart Zone:" 1, 1);
-			   LCDprint("     to    " 2, 1);
-			   LCDprint(stringTargetHeart1, 2, 0);
-			   LCDprint(stringTargetHeart2, 2, 0);
+		else
+		{
+			int2char(stringTargetHeart1, x, 3);
+			int2char(stringTargetHeart2, y, 3);
+			LCDprint("Trgt Heart Zone:" 1, 1);
+			LCDprint("     to    " 2, 1);
+			LCDprint(stringTargetHeart1, 2, 0);
+			LCDprint(stringTargetHeart2, 2, 0);
 				
 		}
-		}
+	}
 }
