@@ -268,7 +268,8 @@ void main (void)
    	char stringbpm[3]; 
    	unsigned int workout;
    	unsigned int age;
-   	char stringTargetHeart[3];
+   	char stringTargetHeart1[3];
+   	char stringTargetHeart2[3];
    	int targetHeart;
    	int x, y;
 	// Configure the LCD
@@ -333,13 +334,17 @@ void main (void)
 			y = targetHeart[1];  //range 2
 			if (targetHeart == 0){
 				//print undefined message to lcd
-				LCDprint("UNDEFINED", 1,1);}
-			else{
-			   int2char(stringTargetHeart, targetHeart, 3);
-			   LCDprint(stringTargetHeart, 2, 1);}
+				LCDprint("UNDEFINED", 1,1);
+				
 		}
-		
-		
-	}
-	
+			else{
+			   int2char(stringTargetHeart1, x, 3);
+			   int2char(stringTargetHeart2, y, 3);
+			   LCDprint("Trgt Heart Zone:" 1, 1);
+			   LCDprint("     to    " 2, 1);
+			   LCDprint(stringTargetHeart1, 2, 0);
+			   LCDprint(stringTargetHeart2, 2, 0);
+				
+		}
+		}
 }
