@@ -236,6 +236,90 @@ void int2char(char *string, unsigned int num, unsigned int size)
 	}
 }
 
+//REFINE THIS FUNCTION
+int whichWorkout(unsigned int workNum)
+{
+	while(B1 & B2) 
+	{
+		if(workNum==1)
+		{
+			LCDprint("1. Endurance", 1, 1);
+			LCDprint("B1-yes  B2-no", 2, 1);
+			if(!B2)
+				workNum = 2;
+			else if(!B1) //if B1 is pressed
+				return workNum;
+			else
+				workNum = 1;
+		}
+		if(workNum==2)
+		{
+			LCDprint("2. Cardio", 1, 1);
+			LCDprint("B1-yes  B2-no", 2, 1);
+			while(workNum==2)
+			{
+				if(!B2)
+					workNum=3;
+				else if(!B1) //if B1 is pressed
+					return workNum;
+				else
+					return;
+			}
+		}
+		if(workNum==3)
+		{
+			LCDprint("3. Intervals", 1, 1);
+			LCDprint("B1-yes  B2-no", 2, 1);
+			while(workNum==3){
+				if(!B2)
+					workNum = 1;
+				else if(!B1) //if B1 is pressed
+					return workNum;
+				else
+					return;
+			}
+		}
+		
+		
+	}
+
+}
+
+int askAge(unsigned int age)
+{
+	char stgNum[3];
+	stgNum = '\0';
+	LCDprint("Enter age: "1,1);
+	LCDprint("B1-up  B2-down", 2, 1);
+	
+	//while B1 and B2 is not pressed
+	while(B1 || B2)
+	{
+		int2char(stgNum, age, 2);
+		LCDprint(stgNum, 2, 0);
+		if(!B1)
+		{
+			while(!B1){
+			age++;
+			if(age > 99)
+				age = 0;
+			}
+		}
+		if(!B2)
+		{
+			while(!B2){
+			age--;
+			if(age == 0)
+				age = 99;	
+			}
+		}
+	
+	}
+	//press B1 and B2 to return
+	while(!B1 & !B2)
+		return age;
+}
+
 int calcTargetRate(unsigned int workout, unsigned int age){
 	unsigned int maxRate = 220-age;
 	int targetRate1;
@@ -332,6 +416,10 @@ void main (void)
 		
 		if (B1==0)
 		{
+			//ask which workout they are doing (initialize to 1st) - CHECK THIS FXN
+			workout = whichWorkout(1);
+			//set age (initialized to 30) - CHECK THIS FXN
+			age = askAge(30);
 			targetHeart = calcTargetRate(workout, age);
 			x = targetHeart[0];  //range 1
 			y = targetHeart[1];  //range 2
