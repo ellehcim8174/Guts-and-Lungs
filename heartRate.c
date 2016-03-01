@@ -292,22 +292,20 @@ unsigned int askAge(unsigned int age)
 	{
 		int2char(stgNum, age, 2);
 		LCDprint(stgNum, 2, 0);
-		if(!B1)
-		{
+		
 			while(!B1){
 			age++;
 			if(age > 99)
 				age = 0;
 			}
-		}
-		else if(!B2)
-		{
+		
+	
 			while(!B2){
 			age--;
 			if(age == 0)
 				age = 99;	
 			}
-		}
+		
 	
 	}
 	//press B3 to return
