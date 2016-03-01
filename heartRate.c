@@ -1,4 +1,3 @@
-
 //  C8051F380/C8051F381 with LCD in 4-bit interface mode
 //  adapted from Jesus Calvino-Fraga
 //  ~C51~
@@ -280,17 +279,16 @@ int whichWorkout(unsigned int workNum)
 	
 }
 
-int askAge(unsigned int age)
+unsigned int askAge(unsigned int age)
 {
 	char stgNum[3];
 	//stgNum = '\0';
 	stgNum[2] = '\0';
-	printf("\x1b[2J"); //clear screen
-	LCDprint("Enter age: ", 1,1);
+	LCDprint("Enter age: ", 1,0);
 	LCDprint("B1-up  B2-down", 2, 1);
 	
-	//while B1 and B2 is not pressed
-	while(B1 || B2)
+	//while B3 is not pressed
+	while(B3)
 	{
 		int2char(stgNum, age, 2);
 		LCDprint(stgNum, 2, 0);
@@ -302,7 +300,7 @@ int askAge(unsigned int age)
 				age = 0;
 			}
 		}
-		if(!B2)
+		else if(!B2)
 		{
 			while(!B2){
 			age--;
@@ -312,11 +310,11 @@ int askAge(unsigned int age)
 		}
 	
 	}
-	//press B1 and B2 to return
-	while(!B1 & !B2){
-		return age;
-		}
-		return 0;
+	//press B3 to return
+	while(!B3);
+	return age;
+		
+		
 }
 
 int * calcTargetRate(unsigned int workout, unsigned int age){
@@ -385,69 +383,56 @@ void main (void)
     while (1)
     {
 
-    	// Reset the counter
-		TL0=0; 
-		TH0=0;
-		TF0=0;
-		overflow_count=0;
-		
-		while(P0_1!=0); // Wait for the signal to be zero
-	
-		while(P0_1!=1); // Wait for the signal to be one
-	
-		TR0=1; // Start the timer
-	
-	    
-		while(P0_1!=0) // Wait for the signal to be zero
+		while(B3)
 		{
-			if(TF0==1) // Did the 16-bit timer overflow?
+			// Reset the counter
+			TL0=0; 
+			TH0=0;
+			TF0=0;
+			overflow_count=0;
+		
+			while(P0_1!=0); // Wait for the signal to be zero
+	
+			while(P0_1!=1); // Wait for the signal to be one
+	
+			TR0=1; // Start the timer
+		
+	    
+			while(P0_1!=0) // Wait for the signal to be zero
 			{
-				TF0=0;
-				overflow_count++;
+				if(TF0==1) // Did the 16-bit timer overflow?
+				{
+					TF0=0;
+					overflow_count++;
+				}
 			}
+		
+	    
+			while(P0_1!=1) // Wait for the signal to be one
+			{
+				if(TF0==1) // Did the 16-bit timer overflow?
+				{
+					TF0=0;
+					overflow_count++;
+				}
+			}
+		
+			TR0=0; // Stop timer 0, the 24-bit number [overflow_count-TH0-TL0] has the period!
+			period=(overflow_count*65536.0+TH0*256.0+TL0)*(12.0/SYSCLK);
+			// Send the period to the serial port
+			printf( "\rf=%fs" , period);
+			bpm = 1.0/(period/60.0);
+			intbpm = bpm;
+			LCDprint("BPM:",1,1);
+			int2char(stringbpm, intbpm, 2);
+			LCDprint(stringbpm,2,1);
 		}
 		
-	    
-		while(P0_1!=1) // Wait for the signal to be one
-		{
-			if(TF0==1) // Did the 16-bit timer overflow?
-			{
-				TF0=0;
-				overflow_count++;
-			}
-		}
-		
-		TR0=0; // Stop timer 0, the 24-bit number [overflow_count-TH0-TL0] has the period!
-		if (!B3)
-			now = 1;
-		period=(overflow_count*65536.0+TH0*256.0+TL0)*(12.0/SYSCLK);
-		if (!B3)
-			now = 1;
-		// Send the period to the serial port
-		printf( "\rf=%fs" , period);
-		bpm = 1.0/(period/60.0);
-		if (!B3)
-			now = 1;
-		intbpm = bpm;
-		
-		if (!B3)
-			now = 1;
-			
-		LCDprint("BPM:",1,1);
-		
-		if (!B3)
-			now = 1;
-		int2char(stringbpm, intbpm, 2);
-		
-		if (!B3)
-			now = 1;
-		LCDprint(stringbpm,2,1);
+    	
 		
 	
-	    
-	    
-	    if(now==1)
-	    	{
+	    while(!B3)
+	    {
 			//ask which workout they are doing (initialize to 1st) - CHECK THIS FXN
 			workout = whichWorkout(1);
 			//set age (initialized to 30) - CHECK THIS FXN
@@ -465,13 +450,12 @@ void main (void)
 			LCDprint("     to    ", 2, 1);
 			LCDprint(stringTargetHeart1, 2, 0);
 			LCDprint(stringTargetHeart2, 2, 0);
-			now = 0;
-			}	
+		
+		}	
 			
-		if (!B3)
-			now = 1;
 	}
 }
 }
+
 
 
