@@ -293,17 +293,23 @@ unsigned int askAge(unsigned int age)
 		int2char(stgNum, age, 2);
 		LCDprint(stgNum, 2, 0);
 		
-			while(!B1){
-			age++;
+			if(!B1){
+			age=age+1;
 			if(age > 99)
 				age = 0;
+				int2char(stgNum, age, 2);
+			LCDprint(stgNum, 2, 0);
+			waitms(100);
 			}
 		
 	
-			while(!B2){
-			age--;
+			if(!B2){
+			age=age-1;
 			if(age == 0)
-				age = 99;	
+				age = 99;
+				int2char(stgNum, age, 2);
+		LCDprint(stgNum, 2, 0);	
+		waitms(100);
 			}
 		
 	
@@ -353,13 +359,14 @@ void main (void)
    	float bpm;
    	unsigned int intbpm;
    	char stringbpm[3]; 
-   	unsigned int workout;
-   	unsigned int age;
+   	unsigned int workout = 0;
+   	unsigned int age = 0;
+   	int flag = 0;
    	int* targetHeart;
-   	/*char stringTargetHeart1[3];
+   	char stringTargetHeart1[3];
    	char stringTargetHeart2[3];
    	int x, y;
-   	int now = 0;*/
+ 
 	// Configure the LCD
 	LCD_4BIT();
 	//initialize string
@@ -435,28 +442,34 @@ void main (void)
 			workout = whichWorkout(1);
 			//set age (initialized to 30) - CHECK THIS FXN
 			age = askAge(30);
+			flag = 1;
+		}
+		if(flag==1)
+		{
+	LCDprint("Trgt Heart Zone:", 1, 1);
 			targetHeart = calcTargetRate(workout, age);
-			/*x = *targetHeart;  //range 1
+			x = *targetHeart;  //range 1
 			y = *(targetHeart+1);  //range 2
+			int2char(stringTargetHeart1, x, 3);
+			int2char(stringTargetHeart2, y, 3);
+			LCDprint(stringTargetHeart1, 2, 0);
+			LCDprint(stringTargetHeart2, 2, 0);
 			if (&targetHeart[0] == 0){
 				//print undefined message to lcd
 				LCDprint("UNDEFINED", 1,1);
 				
+			printf("\x1b[2J");
+			waitms(10);	
 			int2char(stringTargetHeart1, x, 3);
 			int2char(stringTargetHeart2, y, 3);
 			LCDprint("Trgt Heart Zone:", 1, 1);
 			LCDprint("     to    ", 2, 1);
 			LCDprint(stringTargetHeart1, 2, 0);
-			LCDprint(stringTargetHeart2, 2, 0);*/
-		
-		}
-		printf("\x1b[2J");
-		waitms(10);
-		LCDprint("targetZone", 2, 1);	
-			
+			LCDprint(stringTargetHeart2, 2, 0);
+			flag = 0;			//reset flag
+		}	
 	}
 }
-
-
+}
 
 
