@@ -226,6 +226,16 @@ void LCDprint(char * string, unsigned char line, bit clear)
 	if(clear) for(; j<CHARS_PER_LINE; j++) WriteData(' '); // Clear the rest of the line
 }
 
+void LCDprint1(char * string, unsigned char line, bit clear)
+{
+	int j;
+
+	WriteCommand(line==2?0xc8:0Xc4);
+	waitms(5);
+	for(j=0; string[j]!=0; j++)	WriteData(string[j]);// Write the message
+	if(clear) for(; j<CHARS_PER_LINE; j++) WriteData(' '); // Clear the rest of the line
+}
+
 void int2char(char *string, unsigned int num, unsigned int size)
 {
 	while(size > 0 && num != 0){
@@ -368,8 +378,8 @@ void main (void)
    	int* targetHeart;
    	char stringTargetHeart1[3];
    	char stringTargetHeart2[3];
-   	char stringTarget[10];
-   	char stringT[6] = " to ";
+   	char stringTarget[10] = {'\0'};
+   	char stringT[5] = " to ";
    	int x, y;
  
 	// Configure the LCD
@@ -451,18 +461,25 @@ void main (void)
 		}
 		if(flag==1)
 		{
+			while(B1){
+			printf("\x1b[2J");
 			LCDprint("Trgt Heart Zone:", 1, 1);
 			targetHeart = calcTargetRate(workout, age);
-			x = *targetHeart;  //range 1
+			x = *(targetHeart+0);  //range 1
 			y = *(targetHeart+1);  //range 2
 			int2char(stringTargetHeart1, x, 3);
+			LCDprint(stringTargetHeart1, 2, 1);
+			
+	
 			int2char(stringTargetHeart2, y, 3);
+			LCDprint1(stringTargetHeart2, 2, 1);
+		
+			//printf("\x1b[2J");
+			//strcat(stringTarget, stringTargetHeart1);
+			//strcat(stringTarget, stringT);
+			//strcat(stringTarget, stringTargetHeart2);
 			
-			strcat(stringTarget, stringTargetHeart1);
-			strcat(stringTarget, stringT);
-			strcat(stringTarget, stringTargetHeart2);
-			
-			LCDprint(stringTarget, 2, 0);
+			//LCDprint(stringTarget, 2, 1);
 			
 			if (&targetHeart[0] == 0){
 				//print undefined message to lcd
@@ -470,6 +487,8 @@ void main (void)
 				
 		//	printf("\x1b[2J");
 			waitms(1000);
+			}
+			while(!B1);
 			flag = 0;			//reset flag
 		}	
 	}
