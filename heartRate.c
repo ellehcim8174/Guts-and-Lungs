@@ -1,3 +1,4 @@
+
 //  C8051F380/C8051F381 with LCD in 4-bit interface mode
 //  adapted from Jesus Calvino-Fraga
 //  ~C51~
@@ -283,8 +284,9 @@ int whichWorkout(unsigned int workNum)
 int askAge(unsigned int age)
 {
 	char stgNum[3];
-	stgNum = '\0';
-	LCDprint("Enter age: "1,1);
+	//stgNum = '\0';
+	stgNum[2] = '\0';
+	LCDprint("Enter age: ", 1,1);
 	LCDprint("B1-up  B2-down", 2, 1);
 	
 	//while B1 and B2 is not pressed
@@ -311,34 +313,42 @@ int askAge(unsigned int age)
 	
 	}
 	//press B1 and B2 to return
-	while(!B1 & !B2)
+	while(!B1 & !B2){
 		return age;
+		}
+		return 0;
 }
 
-int calcTargetRate(unsigned int workout, unsigned int age){
+int * calcTargetRate(unsigned int workout, unsigned int age){
 	unsigned int maxRate = 220-age;
 	int targetRate1;
 	int targetRate2;
 	int targetArray[2];
+	int* a = &targetArray[0];
 	
-	if (workout==1)
+	if (workout==1){
 		targetRate1 = (double) 0.6*maxRate;
 		targetRate2 = (double) 0.7*maxRate;
-		
-	else if (workout==2)
+		}
+	else if (workout==2){
 		targetRate1 = (double) 0.7*maxRate;
 		targetRate2 = (double) 0.8*maxRate;
+		}
 		
+	else if (workout==3){
+		targetRate1 = (double) 0.8*maxRate;
+		targetRate2 = 0;
+		//&targetArray[0] = targetRate1;
+		}
 		
-	else if (workout==3)
-		return targetRate1 = (double) 0.8*maxRate;
-		
-	else
-		return targetRate1 = 0;
+	else {
+		targetRate1 = 0;
+		targetRate2 = 0;
+		}
 		
 	targetArray[0] = targetRate1;
 	targetArray[1] = targetRate2;
-	return targetArray;
+	return a;
 }
 
 void main (void)
@@ -351,7 +361,7 @@ void main (void)
    	unsigned int age;
    	char stringTargetHeart1[3];
    	char stringTargetHeart2[3];
-   	int targetHeart;
+   	int* targetHeart;
    	int x, y;
 	// Configure the LCD
 	LCD_4BIT();
@@ -416,9 +426,9 @@ void main (void)
 			//set age (initialized to 30) - CHECK THIS FXN
 			age = askAge(30);
 			targetHeart = calcTargetRate(workout, age);
-			x = targetHeart[0];  //range 1
-			y = targetHeart[1];  //range 2
-			if (targetHeart == 0){
+			x = *targetHeart;  //range 1
+			y = *(targetHeart+1);  //range 2
+			if (&targetHeart[0] == 0){
 				//print undefined message to lcd
 				LCDprint("UNDEFINED", 1,1);
 				
@@ -427,11 +437,14 @@ void main (void)
 		{
 			int2char(stringTargetHeart1, x, 3);
 			int2char(stringTargetHeart2, y, 3);
-			LCDprint("Trgt Heart Zone:" 1, 1);
-			LCDprint("     to    " 2, 1);
+			LCDprint("Trgt Heart Zone:", 1, 1);
+			LCDprint("     to    ", 2, 1);
 			LCDprint(stringTargetHeart1, 2, 0);
 			LCDprint(stringTargetHeart2, 2, 0);
 				
 		}
 	}
 }
+}
+
+
