@@ -317,11 +317,10 @@ unsigned int askAge(unsigned int age)
 	
 	}
 	
-	while(!B4)
+	while(!B4);
 		return age;
 		
-	return 0;
-		
+
 		
 }
 
