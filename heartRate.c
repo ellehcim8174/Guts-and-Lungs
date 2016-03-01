@@ -4,6 +4,7 @@
 
 #include <C8051f38x.h>
 #include <stdio.h>
+#include <string.h>
 
 #define SYSCLK      48000000L  // SYSCLK frequency in Hz
 #define BAUDRATE      115200L  // Baud rate of UART in bps
@@ -314,8 +315,7 @@ unsigned int askAge(unsigned int age)
 		
 	
 	}
-	//press B3 to return
-	while(!B3);
+	
 	return age;
 		
 		
@@ -365,6 +365,8 @@ void main (void)
    	int* targetHeart;
    	char stringTargetHeart1[3];
    	char stringTargetHeart2[3];
+   	char stringTarget[10];
+   	char stringT[6] = " to ";
    	int x, y;
  
 	// Configure the LCD
@@ -388,7 +390,7 @@ void main (void)
     while (1)
     {
 
-		while(B3)
+		while(B1)
 		{
 			// Reset the counter
 			TL0=0; 
@@ -436,7 +438,7 @@ void main (void)
     	
 		
 	
-	    while(!B3)
+	    while(!B1)
 	    {
 			//ask which workout they are doing (initialize to 1st) - CHECK THIS FXN
 			workout = whichWorkout(1);
@@ -446,14 +448,20 @@ void main (void)
 		}
 		if(flag==1)
 		{
-	LCDprint("Trgt Heart Zone:", 1, 1);
+			LCDprint("Trgt Heart Zone:", 1, 1);
 			targetHeart = calcTargetRate(workout, age);
 			x = *targetHeart;  //range 1
 			y = *(targetHeart+1);  //range 2
 			int2char(stringTargetHeart1, x, 3);
 			int2char(stringTargetHeart2, y, 3);
-			LCDprint(stringTargetHeart1, 2, 0);
-			LCDprint(stringTargetHeart2, 2, 0);
+			
+			strcat(stringTarget, stringTargetHeart1);
+			strcat(stringTarget, stringT);
+			strcat(stringTarget, stringTargetHeart2);
+			
+			LCDprint(stringTarget, 2, 0);
+			
+			
 			if (&targetHeart[0] == 0){
 				//print undefined message to lcd
 				LCDprint("UNDEFINED", 1,1);
