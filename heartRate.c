@@ -432,9 +432,6 @@ void main (void)
 				//print undefined message to lcd
 				LCDprint("UNDEFINED", 1,1);
 				
-		}
-		else
-		{
 			int2char(stringTargetHeart1, x, 3);
 			int2char(stringTargetHeart2, y, 3);
 			LCDprint("Trgt Heart Zone:", 1, 1);
