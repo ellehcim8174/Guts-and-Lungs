@@ -285,6 +285,7 @@ int askAge(unsigned int age)
 	char stgNum[3];
 	//stgNum = '\0';
 	stgNum[2] = '\0';
+	printf("\x1b[2J"); //clear screen
 	LCDprint("Enter age: ", 1,1);
 	LCDprint("B1-up  B2-down", 2, 1);
 	
