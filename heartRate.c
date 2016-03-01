@@ -20,6 +20,7 @@
 #define B2 P2_5
 #define B1 P2_3
 #define B3 P2_7
+#define LED P1_6
 
 unsigned char overflow_count;
 
@@ -394,7 +395,9 @@ void main (void)
 		while(P0_1!=0); // Wait for the signal to be zero
 	
 		while(P0_1!=1); // Wait for the signal to be one
-	
+		LED = 0; //turn on heart
+			
+		}
 		TR0=1; // Start the timer
 	
 	    
@@ -421,6 +424,7 @@ void main (void)
 		if (!B3)
 			now = 1;
 		period=(overflow_count*65536.0+TH0*256.0+TL0)*(12.0/SYSCLK);
+		LED = 1; //turn off heart
 		if (!B3)
 			now = 1;
 		// Send the period to the serial port
