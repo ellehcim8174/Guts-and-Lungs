@@ -20,6 +20,7 @@
 #define B2 P2_5
 #define B1 P2_3
 #define B3 P2_7
+#define B4 P2_4
 
 unsigned char overflow_count;
 
@@ -289,7 +290,7 @@ unsigned int askAge(unsigned int age)
 	LCDprint("   B1-up B2-down", 2, 1);
 	
 	//while B3 is not pressed
-	while(B3)
+	while(B4)
 	{
 		int2char(stgNum, age, 2);
 		LCDprint(stgNum, 2, 0);
@@ -316,7 +317,10 @@ unsigned int askAge(unsigned int age)
 	
 	}
 	
-	return age;
+	while(!B4)
+		return age;
+		
+	return 0;
 		
 		
 }
@@ -390,7 +394,7 @@ void main (void)
     while (1)
     {
 
-		while(B1)
+		while(B3)
 		{
 			// Reset the counter
 			TL0=0; 
@@ -438,7 +442,7 @@ void main (void)
     	
 		
 	
-	    while(!B1)
+	    while(!B3)
 	    {
 			//ask which workout they are doing (initialize to 1st) - CHECK THIS FXN
 			workout = whichWorkout(1);
@@ -461,19 +465,12 @@ void main (void)
 			
 			LCDprint(stringTarget, 2, 0);
 			
-			
 			if (&targetHeart[0] == 0){
 				//print undefined message to lcd
 				LCDprint("UNDEFINED", 1,1);
 				
-			printf("\x1b[2J");
-			waitms(10);	
-			int2char(stringTargetHeart1, x, 3);
-			int2char(stringTargetHeart2, y, 3);
-			LCDprint("Trgt Heart Zone:", 1, 1);
-			LCDprint("     to    ", 2, 1);
-			LCDprint(stringTargetHeart1, 2, 0);
-			LCDprint(stringTargetHeart2, 2, 0);
+		//	printf("\x1b[2J");
+			waitms(1000);
 			flag = 0;			//reset flag
 		}	
 	}
