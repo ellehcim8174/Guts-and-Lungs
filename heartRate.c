@@ -17,8 +17,9 @@
 #define LCD_D6 P1_1
 #define LCD_D7 P1_0
 #define CHARS_PER_LINE 16
-#define B2 P2_6
+#define B2 P2_5
 #define B1 P2_3
+#define B3 P2_7
 
 unsigned char overflow_count;
 
@@ -240,9 +241,7 @@ void int2char(char *string, unsigned int num, unsigned int size)
 //REFINE THIS FUNCTION
 int whichWorkout(unsigned int workNum)
 {
-	//superloop until it returns a number
-	while(1) 
-	{
+	while(1){
 		if(workNum==1)
 		{
 			LCDprint("1. Endurance", 1, 1);
@@ -250,35 +249,35 @@ int whichWorkout(unsigned int workNum)
 			if(!B2)
 				workNum = 2;
 			else if(!B1) //if B1 is pressed
-				return workNum;
+				return 1;
 			else
 				workNum = 1;
 		}
-		if(workNum==2)
+		else if(workNum==2)
 		{
 			LCDprint("2. Cardio", 1, 1);
 			LCDprint("B1-yes  B2-no", 2, 1);
 			if(!B2)
 				workNum = 3;
 			else if(!B1) //if B1 is pressed
-				return workNum;
+				return 2;
 			else
 				workNum = 2;
 		}
-		if(workNum==3)
+		else
 		{
 			LCDprint("3. Intervals", 1, 1);
 			LCDprint("B1-yes  B2-no", 2, 1);
 			if(!B2)
 				workNum = 1;
 			else if(!B1) //if B1 is pressed
-				return workNum;
+				return 3;
 			else
 				workNum = 3;
 		}
-		
-		
 	}
+		
+	
 }
 
 int askAge(unsigned int age)
@@ -363,6 +362,7 @@ void main (void)
    	char stringTargetHeart2[3];
    	int* targetHeart;
    	int x, y;
+   	int now = 0;
 	// Configure the LCD
 	LCD_4BIT();
 	//initialize string
@@ -383,6 +383,7 @@ void main (void)
 
     while (1)
     {
+
     	// Reset the counter
 		TL0=0; 
 		TH0=0;
@@ -390,8 +391,12 @@ void main (void)
 		overflow_count=0;
 		
 		while(P0_1!=0); // Wait for the signal to be zero
+	
 		while(P0_1!=1); // Wait for the signal to be one
+	
 		TR0=1; // Start the timer
+	
+	    
 		while(P0_1!=0) // Wait for the signal to be zero
 		{
 			if(TF0==1) // Did the 16-bit timer overflow?
@@ -400,6 +405,8 @@ void main (void)
 				overflow_count++;
 			}
 		}
+		
+	    
 		while(P0_1!=1) // Wait for the signal to be one
 		{
 			if(TF0==1) // Did the 16-bit timer overflow?
@@ -408,19 +415,38 @@ void main (void)
 				overflow_count++;
 			}
 		}
+		
 		TR0=0; // Stop timer 0, the 24-bit number [overflow_count-TH0-TL0] has the period!
+		if (!B3)
+			now = 1;
 		period=(overflow_count*65536.0+TH0*256.0+TL0)*(12.0/SYSCLK);
+		if (!B3)
+			now = 1;
 		// Send the period to the serial port
 		printf( "\rf=%fs" , period);
 		bpm = 1.0/(period/60.0);
+		if (!B3)
+			now = 1;
 		intbpm = bpm;
-		//printf("\nbpm=%d\n", intbpm);
+		
+		if (!B3)
+			now = 1;
+			
 		LCDprint("BPM:",1,1);
+		
+		if (!B3)
+			now = 1;
 		int2char(stringbpm, intbpm, 2);
+		
+		if (!B3)
+			now = 1;
 		LCDprint(stringbpm,2,1);
 		
-		if (B1==0)
-		{
+	
+	    
+	    
+	    if(now==1)
+	    	{
 			//ask which workout they are doing (initialize to 1st) - CHECK THIS FXN
 			workout = whichWorkout(1);
 			//set age (initialized to 30) - CHECK THIS FXN
@@ -438,8 +464,11 @@ void main (void)
 			LCDprint("     to    ", 2, 1);
 			LCDprint(stringTargetHeart1, 2, 0);
 			LCDprint(stringTargetHeart2, 2, 0);
-				
-		}
+			now = 0;
+			}	
+			
+		if (!B3)
+			now = 1;
 	}
 }
 }
